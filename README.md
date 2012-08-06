@@ -1,10 +1,7 @@
-Sheep: JavaScript Performance Benchmarking
-==========================================
+Sheep.js: JavaScript Performance Benchmarking
+=============================================
 
-What is Sheep?
---------------
-
-Sheep is a simple tool for running performance tests in the browser and timing their results.
+Sheep.js is a simple tool for running performance tests in the browser.
 
 Examples
 --------
@@ -92,3 +89,5 @@ sheep.test({
     }
 });
 ```
+
+Sheep.js was written by Colin Clark, and is distributed under the MIT and GPL licenses.
