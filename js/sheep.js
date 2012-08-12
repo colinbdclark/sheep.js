@@ -24,11 +24,15 @@ var sheep = sheep || {};
     
     var runTest = function (obj, timing, testFn, onTestComplete) {
         var start = Date.now(),
-            end;
+            end,
+            dur;
         
         testFn(obj);
         end = Date.now();
-        timing.total += (end - start);
+        dur = end - start;
+        timing.total += dur;
+        timing.max = dur > timing.max ? dur : timing.max;
+        timing.min = dur < timing.min ? dur : timing.min;
         if (onTestComplete) {
             onTestComplete(timing);
         }
@@ -75,14 +79,28 @@ var sheep = sheep || {};
     var renderTestRow = function (table, timing) {
         var row = document.createElement("tr");
         table.appendChild(row);
-        row.innerHTML = "<td>" + timing.name + "</td><td>" + timing.runs + "</td><td>" + timing.total + "</td><td>" + timing.avg + "</td>";
+        row.innerHTML = "<td>" +
+            timing.name + "</td><td>" +
+            timing.runs + "</td><td>" +
+            timing.total + "</td><td>" +
+            timing.avg + "</td><td>" +
+            timing.min + "</td><td>" +
+            timing.max + "</td>";
+        
         return row;
     };
     
     var renderTable = function (container) {
         var table = document.createElement("table");
         
-        table.innerHTML = "<tr><th>Name</th><th>Runs</th><th>Total ms</th><th>Avg. ms</th></tr>";
+        table.innerHTML = "<tr>" +
+            "<th>Name</th>" +
+            "<th>Runs</th>" +
+            "<th>Total ms</th>" +
+            "<th>Avg. ms</th>" +
+            "<th>Min</th>" +
+            "<th>Max</th>" +
+            "</tr>";
         container.appendChild(table);
         
         return table.querySelector("tbody");
@@ -91,7 +109,7 @@ var sheep = sheep || {};
     var renderStatusArea = function (table, numTests) {
         var statusArea = document.createElement("tr");
         statusArea.className = "sheep-statusArea";
-	    statusArea.innerHTML = "<td colspan='4'><p>Running test" +
+	    statusArea.innerHTML = "<td colspan='6'><p>Running test" +
 	        " <span class='sheep-currentTest'>0</span> of" +
 	        " <span class='sheep-numTests'>" + numTests + "</span></p></td>";
 	    table.appendChild(statusArea);
@@ -136,6 +154,8 @@ var sheep = sheep || {};
         var obj = spec.setup ? spec.setup() : undefined,
             timing = {
                 total: 0,
+                max: 0,
+                min: Infinity,
                 async: async
             };
         
