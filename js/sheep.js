@@ -15,6 +15,8 @@ var sheep = sheep || {};
 (function () {
     "use strict";
     
+    sheep.clock = window.performance || Date;
+    
     var finishTestSequence = function (timing, spec) {
         timing.avg = timing.total / spec.numReps;
         timing.runs = spec.numReps;
@@ -23,12 +25,12 @@ var sheep = sheep || {};
     };
     
     var runTest = function (obj, timing, testFn, onTestComplete) {
-        var start = Date.now(),
+        var start = sheep.clock.now(),
             end,
             dur;
         
         testFn(obj);
-        end = Date.now();
+        end = sheep.clock.now();
         dur = end - start;
         timing.total += dur;
         timing.max = dur > timing.max ? dur : timing.max;
