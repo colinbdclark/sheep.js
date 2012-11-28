@@ -7,7 +7,7 @@ table, tr, th, td {
 }
 
 table {
-    width: 50%;
+    width: 65%;
 	border-collapse: collapse;
 }
 
@@ -37,5 +37,5 @@ tr:nth-child(odd) {
 }
 
 td:nth-child(1) {
-	width: 50%;
+	width: 40%;
 }

@@ -6,7 +6,7 @@
 * Dual licensed under the MIT and GPL Version 2 licenses.
 */
 
-/*global Spinner*/
+/*global Spinner, window*/
 /*jslint white: true, vars: true, undef: true, newcap: true, regexp: true, browser: true,
     forin: true, continue: true, nomen: true, bitwise: true, maxerr: 100, indent: 4 */
 
@@ -15,7 +15,12 @@ var sheep = sheep || {};
 (function () {
     "use strict";
     
-    sheep.clock = window.performance || Date;
+    var p = window.performance;
+    if (!p) {
+        window.performance = Date;
+    } else if (!p.now) {
+        p.now = p.webkitNow || p.oNow || p.msNow;
+    }
     
     var finishTestSequence = function (timing, spec) {
         timing.avg = timing.total / spec.numReps;
@@ -25,12 +30,12 @@ var sheep = sheep || {};
     };
     
     var runTest = function (obj, timing, testFn, onTestComplete) {
-        var start = sheep.clock.now(),
+        var start = window.performance.now(),
             end,
             dur;
         
         testFn(obj);
-        end = sheep.clock.now();
+        end = window.performance.now();
         dur = end - start;
         timing.total += dur;
         timing.max = dur > timing.max ? dur : timing.max;
@@ -84,10 +89,10 @@ var sheep = sheep || {};
         row.innerHTML = "<td>" +
             timing.name + "</td><td>" +
             timing.runs + "</td><td>" +
-            timing.total + "</td><td>" +
-            timing.avg + "</td><td>" +
-            timing.min + "</td><td>" +
-            timing.max + "</td>";
+            timing.total.toFixed(5) + "</td><td>" +
+            timing.avg.toFixed(5) + "</td><td>" +
+            timing.min.toFixed(5) + "</td><td>" +
+            timing.max.toFixed(5) + "</td>";
         
         return row;
     };
