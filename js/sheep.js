@@ -73,7 +73,7 @@ var sheep = sheep || {};
     };
 
     var runTestSequenceAsync = function (obj, timing, spec) {
-        var batchSize = 2000,
+        var batchSize = spec.batchSize || 2000,
             i = 0;
 
         if (batchSize > spec.numReps) {
