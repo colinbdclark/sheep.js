@@ -76,6 +76,10 @@ var sheep = sheep || {};
         var batchSize = 2000,
             i = 0;
 
+        if (batchSize > spec.numReps) {
+            batchSize = spec.numReps;
+        }
+
         var asyncTest = function () {
             runTestBatch(batchSize, obj, timing, spec.test, function () {
                 i += batchSize;
